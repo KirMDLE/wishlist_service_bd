@@ -1,4 +1,5 @@
 import { isEmail } from "class-validator";
+import { Wishlist } from "src/wishlists/entities/wishlist.entity";
 import {
     Entity,
     PrimaryGeneratedColumn,
@@ -43,7 +44,12 @@ export class User {
   })
   createdAt: Date;
 
+
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.owner)
+  wishlists: Wishlist[];
 }
+
+
 
 //   @OneToMany(() => User, (user) => user.id)
 //   contacts: User[]
