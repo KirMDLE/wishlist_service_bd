@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { WishlistsModule } from './wishlists/wishlists.module';
+import { WishlistsModule } from './wishlists/wishlists.module';
 
 @Module({
   imports: [UsersModule, AuthModule, WishlistsModule],

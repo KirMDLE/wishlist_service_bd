@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { WishlistsService } from './wishlists.service';
 import { WishlistsController } from './wishlists.controller';
+import { WishlistsService } from './wishlists.service';
 
 @Module({
-  providers: [WishlistsService],
-  controllers: [WishlistsController]
+  controllers: [WishlistsController],
+  providers: [WishlistsService]
 })
 export class WishlistsModule {}
