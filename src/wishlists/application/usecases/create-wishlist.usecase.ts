@@ -1,20 +1,24 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { Not } from "typeorm";
+import { UserRepository } from "src/users/repositories/user.repository";
+import { CreateWishlistDto } from "src/wishlists/dto/create-wishlist.dto";
+import { Wishlist } from "src/wishlists/entities/wishlist.entity";
+import { WishlistRepository } from "src/wishlists/repositories/wishlist.repository";
 
 @Injectable()
 export class CreateWishlistUseCase {
     constructor(
         private readonly wishlistRepository: WishlistRepository,
         private readonly userRepository: UserRepository,
+
     ) {}
     
-    async todocreationWishlist(userId: string, dto: CreateWishlistDto): Promise<Wishlist> {
+    async execute(userId: string, dto: CreateWishlistDto): Promise<Wishlist> {
         const user = await this.userRepository.findById(userId);
         if (!user) throw new NotFoundException(`User with ID ${userId} not found`);
 
         const wishlist = this.wishlistRepository.create({
             ...dto,
-            owner: user,
+            owner: { id: userId },
         })
 
         // const sameNameWishlist = await this.wishlistRepository.findOne({

@@ -1,5 +1,6 @@
 import { User } from 'src/users/entities/user.entity';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { WishlistItem } from './wishlist-item.entity';
 
 @Entity()
 export class Wishlist {
@@ -9,6 +10,9 @@ export class Wishlist {
     @Column()
     title: string;
 
+    @Column()
+    onwerId: string;
+
     @Column({ nullable: true })
     description?: string;
 
@@ -16,7 +20,7 @@ export class Wishlist {
     isPublic: boolean;
 
     @ManyToOne(() => User, (user) => user.wishlists)
-    onwer: User;
+    owner: User;
 
     @OneToMany(() => WishlistItem, (item) => item.wishlist)
     items: WishlistItem[];

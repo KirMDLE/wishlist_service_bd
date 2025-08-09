@@ -6,6 +6,8 @@ export class CreateWishlistDto {
   @IsString()
   title: string;
 
+  @IsString()
+  onwerId: string;
 
   @IsOptional()
   @IsString()
