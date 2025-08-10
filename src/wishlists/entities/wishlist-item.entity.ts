@@ -48,6 +48,9 @@ export class WishlistItem {
 
 //   @Column({ default: false })
 //   isReserved: boolean;
+
+  @Column()
+  items: []
 }
 
 
