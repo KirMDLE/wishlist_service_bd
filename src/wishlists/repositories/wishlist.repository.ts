@@ -2,19 +2,25 @@ import { Injectable } from "@nestjs/common";
 import { Wishlist } from "../entities/wishlist.entity";
 import { DataSource, Repository } from "typeorm";
 import { CreateWishlistDto } from "../dto/create-wishlist.dto";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
-export class WishlistRepository extends Repository<Wishlist> {
-    constructor(private dataSource: DataSource) {
-        super(Wishlist, dataSource.createEntityManager());
-    }
+export class WishlistRepository   {
+    constructor(
+      @InjectRepository(Wishlist)
+      private readonly rep: Repository<Wishlist>,
+      )   {}
+        
+      
 
     async createWishlist(createDto: CreateWishlistDto, ownerId: string): Promise<Wishlist> {
-        const wishlist = this.create({
+        const wishlist = this.rep.create({
+
+
           ...createDto,
           owner: { id: ownerId } 
         });
-        return this.save(wishlist);
+        return this.rep.save(wishlist);
       }
     }
     

@@ -16,10 +16,7 @@ export class CreateWishlistUseCase {
         const user = await this.userRepository.findById(userId);
         if (!user) throw new NotFoundException(`User with ID ${userId} not found`);
 
-        const wishlist = this.wishlistRepository.create({
-            ...dto,
-            owner: { id: userId },
-        })
+
 
         // const sameNameWishlist = await this.wishlistRepository.findOne({
         //     where: {
@@ -31,7 +28,7 @@ export class CreateWishlistUseCase {
         // if (sameNameWishlist) {
         //     throw new ConflictException(`A wishlist with the name "${dto.name}" already exists.`);
         // }
-        return this.wishlistRepository.save(wishlist);
+        return this.wishlistRepository.createWishlist(dto, userId);
 
 
     }}

@@ -7,9 +7,13 @@ import { WishlistsModule } from './wishlists/wishlists.module';
 import { CreateWishlistUseCase } from './wishlists/application/usecases/create-wishlist.usecase';
 import { WishlistsService } from './wishlists/wishlists.service';
 import { WishlistRepository } from './wishlists/repositories/wishlist.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmConfig } from './configs/typeorm.config';
 
 @Module({
-  imports: [UsersModule, AuthModule, WishlistsModule],
+  imports: [
+    TypeOrmModule.forRootAsync({ useFactory: TypeOrmConfig }),
+    UsersModule, AuthModule, WishlistsModule],
   controllers: [AppController],
   providers: [
     WishlistsService,

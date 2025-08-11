@@ -11,15 +11,15 @@ import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Wishlist, WishlistItem, WishlistRepository]),
+    TypeOrmModule.forFeature([Wishlist, WishlistItem,]),
     UsersModule
   ],
   controllers: [WishlistsController],
-  providers: [WishlistsService, CreateWishlistUseCase],
+  providers: [WishlistsService, CreateWishlistUseCase, WishlistRepository],
   exports: [
     WishlistsService,
     CreateWishlistUseCase,
-    TypeOrmModule ,
+    TypeOrmModule ,WishlistRepository
   ],  
   
 })
