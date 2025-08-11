@@ -22,15 +22,17 @@ export class UsersService {
       async findByEmail(email: string): Promise<User | null> {
         return this.userRepository.findOne({ where: { email } });
       }
+  
     
     async getUserByName(firstName: string): Promise<User | null> {
-        const user = await this.userRepository.getUserByName(firstName);
-        return user;
+        return this.userRepository.findOne({
+            where: { firstName }
+        });
+    }
       }
     
       // async getUser(dto: Partial<User>): Promise<User | null> {
       //   const user = await this.userRepository.getUser(dto);
       //   return user;
       // }
-    }
     
