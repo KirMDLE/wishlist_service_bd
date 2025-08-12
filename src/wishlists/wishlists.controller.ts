@@ -76,5 +76,46 @@ import { ApiNotFoundResponse } from '@nestjs/swagger';
           .json(successDto)
           .end();
       }
-    }
     
+      @Put(':id')
+      @ApiBody({ type: UpdateWishlistDto })
+      @ApiOkResponse({ type: SuccessUpdateWishlistDto })
+      @ApiForbiddenResponse({ description: 'User is not owner of this wishlist' })
+      @ApiNotFoundResponse({ description: 'Wishlist not found' })
+      async update(
+        @Param('id') wishlistId: string,
+        @Body() updateWishlistDto: UpdateWishlistDto,
+        @AuthUser() user: User,
+        @Res() res: Response,
+      ) {
+        const updatedWishlist = await this.wishlistsService.updateWishlist(user, wishlistId, updateWishlistDto);
+        const successDto: SuccessUpdateWishlistDto = { updateWishlist: plainToClass(PublicWishlist, updatedWishlist) };
+    
+        this.events.emit(Events.Wishlist.Update, user, successDto);
+    
+        return res
+          .status(HttpStatus.OK)
+          .json({ ...successDto, message: 'Wishlist updated successfully' })
+          .end();
+      }
+    
+      @Delete(':id')
+      @ApiOkResponse({ type: SuccessDeleteWishlistDto })
+      @ApiForbiddenResponse({ description: 'User is not owner of this wishlist' })
+      @ApiNotFoundResponse({ description: 'Wishlist not found' })
+      async remove(
+        @Param('id') wishlistId: string,
+        @AuthUser() user: User,
+        @Res() res: Response,
+      ) {
+        const deletedWishlist = await this.wishlistsService.deleteWishlist(user, wishlistId);
+        const successDto: SuccessDeleteWishlistDto = { deleteWishlist: plainToClass(PublicWishlist, deletedWishlist) };
+    
+        this.events.emit(Events.Wishlist.Delete, user, successDto);
+    
+        return res
+          .status(HttpStatus.OK)
+          .json({ ...successDto, message: 'Wishlist deleted successfully' })
+          .end();
+      }
+    }
