@@ -31,8 +31,8 @@ export class UsersService {
     }
       }
     
-      // async getUser(dto: Partial<User>): Promise<User | null> {
-      //   const user = await this.userRepository.getUser(dto);
-      //   return user;
-      // }
+      async getUser(dto: Partial<User>): Promise<User | null> {
+        const user = await this.userRepository.getUser(dto);
+        return user;
+      }
     

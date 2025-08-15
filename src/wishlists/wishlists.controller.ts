@@ -8,6 +8,8 @@ import type { Response } from 'express';
 import { ApiBody, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { HttpStatus, Get, Param, Query, Put, Delete, Res } from '@nestjs/common';
 import { ApiNotFoundResponse } from '@nestjs/swagger';
+import { WishlistsService } from './wishlists.service';
+import { plainToClass } from 'class-transformer';
 
 
     @UseGuards(JwtAccessTokenGuard)
@@ -21,7 +23,7 @@ import { ApiNotFoundResponse } from '@nestjs/swagger';
     
       @Post()
       @ApiBody({ type: CreateWishlistDto })
-      @ApiOkResponse({ type: SuccessCreateWishlistDto })
+      @ApiOkResponse({ type: CreateWishlistDto })
       @ApiForbiddenResponse({ description: 'User does not have access' })
       @ApiInternalServerErrorResponse({ description: 'Something went wrong' })
       async create(
