@@ -9,11 +9,12 @@ import { WishlistsService } from './wishlists/wishlists.service';
 import { WishlistRepository } from './wishlists/repositories/wishlist.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfig } from './configs/typeorm.config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({ useFactory: TypeOrmConfig }),
-    UsersModule, AuthModule, WishlistsModule],
+    UsersModule, AuthModule, EventEmitterModule.forRoot(), WishlistsModule],
   controllers: [AppController],
   providers: [
     WishlistsService,

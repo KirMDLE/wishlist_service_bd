@@ -10,6 +10,10 @@ import { HttpStatus, Get, Param, Query, Put, Delete, Res } from '@nestjs/common'
 import { ApiNotFoundResponse } from '@nestjs/swagger';
 import { WishlistsService } from './wishlists.service';
 import { plainToClass } from 'class-transformer';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Events } from 'src/shared/events/events';
+import { PaginationQueryDto } from 'src/shared/decorators/dto/pagination-query.dto';
+import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 
 
     @UseGuards(JwtAccessTokenGuard)
