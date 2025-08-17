@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { Wishlist } from './entities/wishlist.entity';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { User } from '../users/entities/user.entity';
+import { PaginationQueryDto } from 'src/shared/decorators/dto/pagination-query.dto';
+import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 
 @Injectable()
 export class WishlistsService {
@@ -18,7 +20,7 @@ export class WishlistsService {
   async create(user: User, dto: CreateWishlistDto): Promise<Wishlist> {
     const wishlist = this.wishlistRepository.create({
       ...dto,
-      user, 
+      owner: user , 
     });
     return this.wishlistRepository.save(wishlist);
   }
@@ -29,7 +31,7 @@ export class WishlistsService {
   ): Promise<Wishlist[]> {
     const { skip, take } = pagination;
     return this.wishlistRepository.find({
-      where: { user: { id: userId } },
+      where: { owner: { id: userId } },
       skip,
       take,
     });
@@ -41,7 +43,7 @@ export class WishlistsService {
 
   async findOne(userId: string, wishlistId: string): Promise<Wishlist> {
     const wishlist = await this.wishlistRepository.findOne({
-      where: { id: wishlistId, user: { id: userId } },
+      where: { id: wishlistId, owner: { id: userId } },
     });
 
     if (!wishlist) {
