@@ -36,7 +36,7 @@ import { UpdateWishlistDto } from './dto/update-wishlist.dto';
         @Res() res: Response,
       ) {
         const wishlist = await this.wishlistsService.createWishlist(user, body);
-        const publicWishlist = plainToClass(PublicWishlist, wishlist);
+        const publicWishlist = plainToClass(publicWishlist, wishlist);
         const successDto: SuccessCreateWishlistDto = { createWishlist: publicWishlist };
     
         this.events.emit(Events.Wishlist.Create, user, successDto);

@@ -47,9 +47,18 @@ export class User {
 
   @OneToMany(() => Wishlist, (wishlist) => wishlist.owner)
   wishlists: Wishlist[];
+
+
+
+
+@Column({
+  type: 'varchar', 
+  default: 'en' ,
+})
+preferredLanguage: string;
+
+
 }
-
-
 
 //   @OneToMany(() => User, (user) => user.id)
 //   contacts: User[]
