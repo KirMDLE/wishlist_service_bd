@@ -17,7 +17,7 @@ export class WishlistsService {
 
 
 
-  async create(user: User, dto: CreateWishlistDto): Promise<Wishlist> {
+  async createWishlist(user: User, dto: CreateWishlistDto): Promise<Wishlist> {
     const wishlist = this.wishlistRepository.create({
       ...dto,
       owner: user , 
