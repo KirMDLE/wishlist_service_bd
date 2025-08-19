@@ -23,6 +23,10 @@ import { UpdateWishlistDto } from './dto/update-wishlist.dto';
       constructor(
         private readonly wishlistsService: WishlistsService,
         private readonly events: EventEmitter2,
+        private readonly createWishlistUseCase: CreateWishlistUseCase,
+        private readonly getWishlistsUseCase: GetWishlistsUseCase,
+        private readonly updateWishlistUseCase: UpdateWishlistUseCase,
+        private readonly deleteWishlistUseCase: DeleteWishlistUseCase,
       ) {}
     
       @Post()
@@ -30,39 +34,22 @@ import { UpdateWishlistDto } from './dto/update-wishlist.dto';
       @ApiOkResponse({ type: CreateWishlistDto })
       @ApiForbiddenResponse({ description: 'User does not have access' })
       @ApiInternalServerErrorResponse({ description: 'Something went wrong' })
-      async create(
-        @AuthUser() user: User,
-        @Body() body: CreateWishlistDto,
-        @Res() res: Response,
-      ) {
-        const wishlist = await this.wishlistsService.createWishlist(user, body);
-        const publicWishlist = plainToClass(publicWishlist, wishlist);
+      async create(@AuthUser() user: any, @Body() dto: CreateWishlistDto) {
+        const wishlist = await this.createWishlistUseCase.execute(user.id, dto);
+        const publicWishlist = PublicWishlist.fromEntity(wishlist);
         const successDto: SuccessCreateWishlistDto = { createWishlist: publicWishlist };
-    
         this.events.emit(Events.Wishlist.Create, user, successDto);
-    
-        return res
-          .status(HttpStatus.OK)
-          .json({ ...successDto, message: 'Wishlist created successfully' })
-          .end();
+        return { ...successDto, message: 'Wishlist created successfully' };
       }
     
       @Get()
       @ApiOkResponse({ type: SuccessGetWishlistsDto })
       @ApiInternalServerErrorResponse({ description: 'Something went wrong' })
-      async findAll(
-        @Query() pagination: PaginationQueryDto,
-        @Res() res: Response,
-        @AuthUser() user: PublicUserData,
-      ) {
-        const wishlists = await this.wishlistsService.getAllWishlists(user.publicId, pagination);
-        const publicWishlists = wishlists.map(wishlist => plainToClass(PublicWishlist, wishlist));
+      async findAll(@AuthUser() user: any, @Query() pagination: PaginationQueryDto) {
+        const wishlists = await this.getWishlistsUseCase.execute(user.id, pagination);
+        const publicWishlists = wishlists.map(PublicWishlist.fromEntity);
         const successDto: SuccessGetWishlistsDto = { wishlists: publicWishlists };
-    
-        return res
-          .status(HttpStatus.OK)
-          .json(successDto)
-          .end();
+        return successDto;
       }
     
       @Get(':id')
