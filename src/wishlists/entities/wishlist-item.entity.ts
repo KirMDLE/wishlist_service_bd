@@ -38,7 +38,7 @@ export class WishlistItem {
   description: string;
 
   @ManyToOne(() => WishlistItem, (wishlist) =>wishlist.items)
-    wishlist: WishlistItem;
+    wishlist: Wishlist;
 
   @ManyToOne(() => User, { nullable: true })
   reservedBy: User | null;
@@ -50,8 +50,7 @@ export class WishlistItem {
 //   isReserved: boolean;
 
   @Column()
-  items: []
-}
+  items: WishlistItem[]}
 
 
 

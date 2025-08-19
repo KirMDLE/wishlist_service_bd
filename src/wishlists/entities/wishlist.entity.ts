@@ -11,7 +11,7 @@ export class Wishlist {
     title: string;
 
     @Column()
-    onwerId: string;
+    ownerId: string;
 
     @Column({ nullable: true })
     description?: string;
