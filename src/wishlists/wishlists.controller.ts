@@ -1,19 +1,19 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { CreateWishlistUseCase } from './application/usecases/create-wishlist.usecase';
-import { User } from 'src/users/entities/user.entity';
+import { Body, Controller, Post, Get, Put, Delete, Query, Param, UseGuards } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { JwtAccessTokenGuard } from 'src/guards/jwt-access-token.guard';
 import { AuthUser } from 'src/shared/decorators/auth-user.decorator';
-import { CreateWishlistDto } from './dto/create-wishlist.dto';
-import type { Response } from 'express';
-import { ApiBody, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { HttpStatus, Get, Param, Query, Put, Delete, Res } from '@nestjs/common';
-import { ApiNotFoundResponse } from '@nestjs/swagger';
-import { WishlistsService } from './wishlists.service';
-import { plainToClass } from 'class-transformer';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Events } from 'src/shared/events/events';
 import { PaginationQueryDto } from 'src/shared/decorators/dto/pagination-query.dto';
+import { Events } from 'src/shared/events/events';
+import { WishlistsService } from './wishlists.service';
+import { CreateWishlistUseCase } from './application/usecases/create-wishlist.usecase';
+import { GetWishlistsUseCase } from './application/usecases/get-wishlists.usecase';
+import { UpdateWishlistUseCase } from './application/usecases/update-wishlist.usecase';
+import { DeleteWishlistUseCase } from './application/usecases/delete-wishlist.usecase';
+import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
+import { PublicWishlist } from './dto/public-wishlist.dto';
+import { SuccessCreateWishlistDto, SuccessGetWishlistsDto, SuccessUpdateWishlistDto, SuccessDeleteWishlistDto } from './dto/success-wishlist.dto';
+import { ApiTags, ApiBody, ApiOkResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 
 
     @UseGuards(JwtAccessTokenGuard)
