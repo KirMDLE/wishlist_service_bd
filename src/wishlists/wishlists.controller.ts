@@ -55,60 +55,34 @@ import { UpdateWishlistDto } from './dto/update-wishlist.dto';
       @Get(':id')
       @ApiOkResponse({ type: SuccessGetWishlistsDto })
       @ApiNotFoundResponse({ description: 'Wishlist not found' })
-      async findOne(
-        @Param('id') wishlistId: string,
-        @Res() res: Response,
-        @AuthUser() user: PublicUserData,
-      ) {
-        const wishlist = await this.wishlistsService.getWishlistById(user.publicId, wishlistId);
-        const publicWishlist = plainToClass(PublicWishlist, wishlist);
+      async findOne(@AuthUser() user: any, @Param('id') wishlistId: string) {
+        const wishlist = await this.getWishlistsUseCase.executeById(user.id, wishlistId);
+        const publicWishlist = PublicWishlist.fromEntity(wishlist);
         const successDto: SuccessGetWishlistsDto = { wishlists: [publicWishlist] };
-    
-        return res
-          .status(HttpStatus.OK)
-          .json(successDto)
-          .end();
+        return successDto;
       }
+    
     
       @Put(':id')
       @ApiBody({ type: UpdateWishlistDto })
       @ApiOkResponse({ type: SuccessUpdateWishlistDto })
       @ApiForbiddenResponse({ description: 'User is not owner of this wishlist' })
       @ApiNotFoundResponse({ description: 'Wishlist not found' })
-      async update(
-        @Param('id') wishlistId: string,
-        @Body() updateWishlistDto: UpdateWishlistDto,
-        @AuthUser() user: User,
-        @Res() res: Response,
-      ) {
-        const updatedWishlist = await this.wishlistsService.updateWishlist(user, wishlistId, updateWishlistDto);
-        const successDto: SuccessUpdateWishlistDto = { updateWishlist: plainToClass(PublicWishlist, updatedWishlist) };
-    
+      async update(@AuthUser() user: any, @Param('id') wishlistId: string, @Body() dto: UpdateWishlistDto) {
+        const updatedWishlist = await this.updateWishlistUseCase.execute(user.id, wishlistId, dto);
+        const successDto: SuccessUpdateWishlistDto = { updateWishlist: PublicWishlist.fromEntity(updatedWishlist) };
         this.events.emit(Events.Wishlist.Update, user, successDto);
-    
-        return res
-          .status(HttpStatus.OK)
-          .json({ ...successDto, message: 'Wishlist updated successfully' })
-          .end();
+        return { ...successDto, message: 'Wishlist updated successfully' };
       }
     
       @Delete(':id')
       @ApiOkResponse({ type: SuccessDeleteWishlistDto })
       @ApiForbiddenResponse({ description: 'User is not owner of this wishlist' })
       @ApiNotFoundResponse({ description: 'Wishlist not found' })
-      async remove(
-        @Param('id') wishlistId: string,
-        @AuthUser() user: User,
-        @Res() res: Response,
-      ) {
-        const deletedWishlist = await this.wishlistsService.deleteWishlist(user, wishlistId);
-        const successDto: SuccessDeleteWishlistDto = { deleteWishlist: plainToClass(PublicWishlist, deletedWishlist) };
-    
+      async remove(@AuthUser() user: any, @Param('id') wishlistId: string) {
+        const deletedWishlist = await this.deleteWishlistUseCase.execute(user.id, wishlistId);
+        const successDto: SuccessDeleteWishlistDto = { deleteWishlist: PublicWishlist.fromEntity(deletedWishlist) };
         this.events.emit(Events.Wishlist.Delete, user, successDto);
-    
-        return res
-          .status(HttpStatus.OK)
-          .json({ ...successDto, message: 'Wishlist deleted successfully' })
-          .end();
+        return { ...successDto, message: 'Wishlist deleted successfully' };
       }
     }
