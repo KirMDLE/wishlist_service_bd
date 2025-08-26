@@ -8,6 +8,7 @@ import {
     CreateDateColumn,
     UpdateDateColumn
   } from 'typeorm';
+  import { Exclude } from 'class-transformer';
 
 
 @Entity('user')
@@ -29,6 +30,7 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude({ toPlainOnly: true })
   password: string;
 
 
