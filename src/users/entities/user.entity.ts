@@ -1,5 +1,6 @@
 import { isEmail } from "class-validator";
-import { Wishlist } from "src/wishlists/entities/wishlist.entity";
+import { Wishlist } from "wishlists/entities/wishlist.entity";
+
 import {
     Entity,
     PrimaryGeneratedColumn,
