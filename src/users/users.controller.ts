@@ -14,11 +14,24 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ 
+    status: HttpStatus.OK, 
+    description: 'List of users retrieved successfully',
+    type: [UserResponseDto] 
+  })
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get user by ID' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'User found', type: UserResponseDto })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   async findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
@@ -36,11 +49,21 @@ export class UsersController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update user by ID' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'User updated', type: UserResponseDto })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   async update(@Param('id') id: string, @Body() dto: UpdateUserDto): Promise<User> {
     return this.usersService.update(id, dto);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete user by ID' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'User deleted' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   async remove(@Param('id') id: string): Promise<void> {
     return this.usersService.remove(id);
   }
