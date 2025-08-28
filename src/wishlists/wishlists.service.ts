@@ -50,18 +50,22 @@ export class WishlistsService {
       throw new NotFoundException('Wishlist not found or access denied');
     }
     return wishlist;
+
+
+
   }
-  async update(
-    userId: string,
-    wishlistId: string,
-    dto: UpdateWishlistDto,
-  ): Promise<Wishlist> {
-    await this.findOne(userId, wishlistId); 
-    await this.wishlistRepository.update(wishlistId, dto);
-    return this.findOne(userId, wishlistId);
-  }
-  async remove(userId: string, wishlistId: string): Promise<void> {
-    await this.findOne(userId, wishlistId); 
-    await this.wishlistRepository.delete(wishlistId);
-  }
+  // async update(
+  //   userId: string,
+  //   wishlistId: string,
+  //   dto: UpdateWishlistDto,
+  // ): Promise<Wishlist> {
+  //   await this.findOne(userId, wishlistId); 
+  //   await this.wishlistRepository.update(wishlistId, dto);
+  //   return this.findOne(userId, wishlistId);
+  // }
+//   async remove(userId: string, wishlistId: string): Promise<void> {
+//     await this.findOne(userId, wishlistId); 
+//     await this.wishlistRepository.delete(wishlistId);
+//   }
+// }
 }
