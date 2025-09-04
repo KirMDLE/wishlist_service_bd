@@ -1,30 +1,37 @@
-import { useState } from "react";
-
-import Greeting from "./components/greetPage"
+import { useEffect, useState } from "react";
+import api from "./api";
+import type { Gift } from "./types/types";
 
 export default function App() {
 
-    const [gifts,setGifts] = useState<string[]>(['книга', 'часы'])
+const [gifts, setGifts] = useState<Gift[]>([]);
     const [newGift,setNewGift] = useState('');
+
+    // api from back
+    useEffect(()=>{
+        api.get<Gift[]>('/gifts').then((res) => setGifts(res.data));
+        }, [])
+
+    
     // add element
     
-    function addGift(e: React.FormEvent) {
+    async function addGift(e: React.FormEvent) {
         e.preventDefault();
-        if (newGift.trim()) {
-            setGifts([...gifts, newGift.trim()]);
+        if (newGift.trim()) return;
+        
+        const res = await api.post<Gift>('/gifts', {title: newGift.trim()})
+            setGifts([...gifts, res.data]);
             setNewGift('')
         }
-        // const newGift = prompt('что добавить в вишлист?');
-        // if (newGift) {
-        //     setGifts([...gifts,newGift])
-        // }
-    }
+
+    
     
     // delete element
 
 
-    function removeGift(index: number) {
-        setGifts(gifts.filter((_, i)=> i !== index))
+    async function removeGift(id: number) {
+        await api.delete(`/gifts/${id}`);
+        setGifts(gifts.filter((g)=> g.id !== id))
     }
 
 
@@ -48,7 +55,7 @@ export default function App() {
             <ul>
                 {gifts.map((gift, index) => 
                 <li key={index}>
-                    {gift} <button onClick={() => removeGift(index)}> delete</button>
+                    {gift.title} <button onClick={() => removeGift(index)}> delete</button>
                     </li>
                 )}
             </ul>
