@@ -63,28 +63,37 @@ const [gifts, setGifts] = useState<Gift[]>([]);
     //// return
     return (
         <div>
-            <form onSubmit={addGift}>
+          <h1>gits list ({gifts.length})</h1>
+    
+          {error && <div style={}>{error}</div>}
+    
+          <form onSubmit={addGift}>
             <input
-            type='text'
-            placeholder="введите подарок"
-            value={newGift}
-            onChange={(e) => setNewGift(e.target.value)}
+              type="text"
+              placeholder=" "
+              value={newGift}
+              onChange={(e) => setNewGift(e.target.value)}
+              disabled={submitting}
             />
-            </form>
-
-
-
-
-
-
+            <button type="submit" disabled={submitting || !newGift.trim()}>
+              {submitting ? "adding..." : "add"}
+            </button>
+          </form>
+    
+          {loading ? (
+            <div>loading...</div>
+          ) : gifts.length === 0 ? (
+            <div>there is no gifts</div>
+          ) : (
             <ul>
-                {gifts.map((gift, index) => 
-                <li key={index}>
-                    {gift.title} <button onClick={() => removeGift(index)}> delete</button>
-                    </li>
-                )}
+            {gifts.map((gift) => (
+                <li key={gift.id}>
+         {gift.title}{" "}
+          <button onClick={() => removeGift(gift.id)}>del</button>
+                </li>
+              ))}
             </ul>
-            <button onClick={addGift} > добавить подарок</button>
+          )}
         </div>
-    );
-}
+      );
+    }
